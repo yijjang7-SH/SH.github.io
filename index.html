@@ -7,12 +7,21 @@
 /* ── 전체 초기화 ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
+html {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #05071e;
+}
+
+body {
   width: 3840px;
   height: 1080px;
   overflow: hidden;
   background: #05071e;
   font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  transform-origin: top left;
+  /* scaleBody() 함수가 화면 크기에 맞게 자동 조정 */
 }
 
 /* ── 배경 이미지 ── */
@@ -447,24 +456,61 @@ html, body {
 </div>
 
 <script>
-/* ── 실시간 시계 ── */
+/* ── 1. 화면 크기에 맞게 자동 스케일 ── */
+function scaleBody() {
+  var scaleX = window.innerWidth  / 3840;
+  var scaleY = window.innerHeight / 1080;
+  var scale  = Math.min(scaleX, scaleY);
+  document.body.style.transform = 'scale(' + scale + ')';
+  /* 남는 여백을 가운데 정렬 */
+  var offsetX = (window.innerWidth  - 3840 * scale) / 2;
+  var offsetY = (window.innerHeight - 1080 * scale) / 2;
+  document.body.style.marginLeft = offsetX + 'px';
+  document.body.style.marginTop  = offsetY + 'px';
+}
+scaleBody();
+window.addEventListener('resize', scaleBody);
+
+/* ── 2. 자동 전체화면 (클릭 시 전체화면 전환) ── */
+function goFullscreen() {
+  var el = document.documentElement;
+  if (!document.fullscreenElement) {
+    if      (el.requestFullscreen)       el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    else if (el.mozRequestFullScreen)    el.mozRequestFullScreen();
+  }
+}
+/* 페이지 로드 후 3초 뒤 자동 전체화면 시도 */
+window.addEventListener('load', function() {
+  setTimeout(goFullscreen, 3000);
+});
+/* 전체화면 해제됐을 때 다시 시도 */
+document.addEventListener('fullscreenchange', function() {
+  if (!document.fullscreenElement) {
+    setTimeout(goFullscreen, 1500);
+  }
+});
+/* 화면 클릭 시에도 전체화면 */
+document.addEventListener('click', goFullscreen);
+
+/* ── 3. 실시간 시계 ── */
 function updateClock() {
-  const now = new Date();
-  const h = String(now.getHours()).padStart(2,'0');
-  const m = String(now.getMinutes()).padStart(2,'0');
-  const s = String(now.getSeconds()).padStart(2,'0');
+  var now = new Date();
+  var h = String(now.getHours()).padStart(2,'0');
+  var m = String(now.getMinutes()).padStart(2,'0');
+  var s = String(now.getSeconds()).padStart(2,'0');
   document.getElementById('clock').textContent = h + ':' + m + ':' + s;
 }
 updateClock();
 setInterval(updateClock, 1000);
 
-/* ── YouTube ID가 기본값이면 플레이스홀더 표시 ── */
+/* ── 4. YouTube ID 기본값이면 플레이스홀더 표시 ── */
 window.addEventListener('load', function() {
-  const iframe = document.getElementById('yt-player');
+  var iframe = document.getElementById('yt-player');
   if (iframe && iframe.src.includes('YOUTUBE_VIDEO_ID')) {
     iframe.style.display = 'none';
-    const placeholder = iframe.parentElement.querySelector('.video-placeholder');
-    if (placeholder) placeholder.style.display = 'flex';
+    var ph = iframe.parentElement.querySelector('.video-placeholder');
+    if (ph) ph.style.display = 'flex';
   }
 });
 </script>
