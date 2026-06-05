@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <title>LED 패널 디스플레이</title>
 <style>
-/* ── 전체 초기화 ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
@@ -15,33 +14,31 @@ html {
 }
 
 body {
-  width: 3840px;
+  width: 2456px;
   height: 1080px;
   overflow: hidden;
   background: #05071e;
   font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
   transform-origin: top left;
-  /* scaleBody() 함수가 화면 크기에 맞게 자동 조정 */
 }
 
 /* ── 배경 이미지 ── */
 .bg {
   position: absolute;
   inset: 0;
-  background: url('bg.png') left center / auto 100% no-repeat;
-  /* 우측 공간은 배경색(#05071e)으로 자연스럽게 채워짐 */
+  background: url('bg.png') center center / cover no-repeat;
 }
 
-/* ── 배경 위 그라데이션 오버레이 (텍스트 가독성 향상) ── */
+/* ── 오버레이 ── */
 .overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to right,
-    rgba(0,0,0,0.15) 0%,
-    rgba(0,0,0,0.05) 40%,
-    rgba(5,7,30,0.3)  70%,
-    rgba(5,7,30,0.55) 100%
+    rgba(0,0,0,0.10) 0%,
+    rgba(0,0,0,0.05) 35%,
+    rgba(5,7,30,0.25) 65%,
+    rgba(5,7,30,0.50) 100%
   );
 }
 
@@ -49,296 +46,221 @@ body {
 .layout {
   position: relative;
   z-index: 10;
-  width: 3840px;
+  width: 2456px;
   height: 1080px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
 }
 
-/* ══════════════════════════════
-   좌측 패널 — 텍스트 + 정보
-══════════════════════════════ */
+/* ══════════════════════
+   좌측 패널
+══════════════════════ */
 .left-panel {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 80px 100px 80px 120px;
-  gap: 28px;
+  padding: 70px 80px 100px 90px;
+  gap: 22px;
 }
 
-/* 상단 태그 */
-.tag-line {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
+.tag-line { display: flex; align-items: center; gap: 12px; }
 .tag {
   display: inline-block;
-  background: rgba(30, 120, 255, 0.25);
-  border: 1px solid rgba(80, 160, 255, 0.5);
+  background: rgba(30,120,255,0.22);
+  border: 1px solid rgba(80,160,255,0.45);
   color: #7ec8ff;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 500;
   letter-spacing: 3px;
   text-transform: uppercase;
-  padding: 6px 24px;
+  padding: 5px 20px;
   border-radius: 4px;
 }
 .tag-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
+  width: 9px; height: 9px; border-radius: 50%;
   background: #3bf0a0;
-  box-shadow: 0 0 12px #3bf0a0;
+  box-shadow: 0 0 10px #3bf0a0;
   animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.4; transform: scale(0.7); }
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:0.4; transform:scale(0.7); }
 }
 
-/* 메인 타이틀 */
 .main-title {
-  font-size: 96px;
+  font-size: 76px;
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -2px;
   color: #ffffff;
-  text-shadow: 0 0 60px rgba(80,160,255,0.35);
+  text-shadow: 0 0 50px rgba(80,160,255,0.3);
 }
 .main-title .accent {
   color: #4fa3ff;
-  text-shadow: 0 0 40px rgba(79,163,255,0.6);
+  text-shadow: 0 0 36px rgba(79,163,255,0.55);
 }
 
-/* 서브 타이틀 */
 .sub-title {
-  font-size: 36px;
-  color: rgba(200,220,255,0.75);
-  letter-spacing: 1px;
+  font-size: 28px;
+  color: rgba(200,220,255,0.72);
+  letter-spacing: 0.5px;
   font-weight: 300;
   line-height: 1.5;
 }
 
-/* 구분선 */
 .divider {
-  width: 120px;
-  height: 3px;
+  width: 100px; height: 3px;
   background: linear-gradient(to right, #4fa3ff, transparent);
   border-radius: 2px;
 }
 
-/* 정보 카드 행 */
-.info-row {
-  display: flex;
-  gap: 24px;
-  margin-top: 8px;
-}
+.info-row { display: flex; gap: 20px; margin-top: 6px; }
 .info-card {
   background: rgba(255,255,255,0.07);
   border: 1px solid rgba(100,160,255,0.2);
-  border-radius: 12px;
-  padding: 20px 32px;
-  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 16px 26px;
   text-align: center;
-  min-width: 200px;
+  min-width: 160px;
 }
 .info-card .num {
-  font-size: 48px;
-  font-weight: 800;
-  color: #4fa3ff;
-  line-height: 1;
+  font-size: 38px; font-weight: 800;
+  color: #4fa3ff; line-height: 1;
 }
-.info-card .unit {
-  font-size: 24px;
-  color: #7ec8ff;
-}
-.info-card .label {
-  font-size: 20px;
-  color: rgba(180,210,255,0.6);
-  margin-top: 6px;
-}
+.info-card .unit { font-size: 20px; color: #7ec8ff; }
+.info-card .lbl  { font-size: 16px; color: rgba(180,210,255,0.6); margin-top: 5px; }
 
-/* ══════════════════════════════
-   우측 패널 — 영상 + 사진 슬롯
-══════════════════════════════ */
+/* ══════════════════════
+   우측 패널
+══════════════════════ */
 .right-panel {
   display: grid;
   grid-template-rows: 2fr 1fr;
-  padding: 40px 80px 40px 40px;
-  gap: 24px;
+  padding: 36px 64px 36px 32px;
+  gap: 20px;
 }
 
-/* 유튜브 영상 영역 */
+/* 영상 슬롯 */
 .video-slot {
   position: relative;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid rgba(80,140,255,0.3);
-  box-shadow: 0 0 40px rgba(30,100,255,0.2), inset 0 0 0 1px rgba(255,255,255,0.05);
+  border: 1px solid rgba(80,140,255,0.28);
+  box-shadow: 0 0 32px rgba(30,100,255,0.18);
   background: #000;
 }
 .video-slot iframe {
-  width: 100%;
-  height: 100%;
-  display: block;
-  border: none;
+  width: 100%; height: 100%;
+  display: block; border: none;
 }
-/* 영상 없을 때 플레이스홀더 */
 .video-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
+  position: absolute; inset: 0;
+  display: none;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(5,15,50,0.8);
-  gap: 16px;
-  display: none; /* 기본 숨김, iframe 없을 때 보임 */
+  align-items: center; justify-content: center;
+  background: rgba(5,15,50,0.82); gap: 14px;
 }
 .video-placeholder .play-icon {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  border: 3px solid rgba(80,160,255,0.5);
+  width: 70px; height: 70px; border-radius: 50%;
+  border: 3px solid rgba(80,160,255,0.45);
   display: flex; align-items: center; justify-content: center;
-  font-size: 36px; color: rgba(80,160,255,0.7);
+  font-size: 30px; color: rgba(80,160,255,0.65);
 }
-.video-placeholder p {
-  font-size: 22px; color: rgba(150,190,255,0.6);
-}
-
-/* 영상 상단 라벨 */
+.video-placeholder p { font-size: 18px; color: rgba(150,190,255,0.55); }
 .video-label {
-  position: absolute;
-  top: 16px; left: 20px; z-index: 5;
-  background: rgba(30,100,255,0.7);
-  color: #fff;
-  font-size: 18px; font-weight: 600;
-  padding: 4px 16px; border-radius: 4px;
-  letter-spacing: 1px;
-  /* YouTube embed 위에 오버레이되려면 pointer-events:none */
-  pointer-events: none;
+  position: absolute; top: 14px; left: 16px; z-index: 5;
+  background: rgba(30,100,255,0.68);
+  color: #fff; font-size: 15px; font-weight: 600;
+  padding: 3px 14px; border-radius: 4px;
+  letter-spacing: 1px; pointer-events: none;
 }
 
-/* 사진 슬라이드 행 */
+/* 사진 3칸 */
 .photo-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 16px;
 }
 .photo-slot {
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(80,140,255,0.25);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  position: relative;
-  cursor: pointer;
+  border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(80,140,255,0.22);
+  position: relative; cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .photo-slot:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 40px rgba(30,100,255,0.35);
+  box-shadow: 0 8px 32px rgba(30,100,255,0.3);
 }
-.photo-slot img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-}
-/* 사진 없을 때 플레이스홀더 */
+.photo-slot img { width:100%; height:100%; object-fit:cover; display:block; }
 .photo-slot .photo-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(5,15,50,0.85);
-  gap: 10px;
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: rgba(5,15,50,0.85); gap: 8px;
 }
-.photo-slot .photo-placeholder .ph-icon {
-  font-size: 40px; opacity: 0.4;
-}
-.photo-slot .photo-placeholder p {
-  font-size: 18px; color: rgba(150,190,255,0.5);
-  text-align: center; line-height: 1.4;
-}
-/* 사진 라벨 오버레이 */
+.photo-slot .photo-placeholder .ph-icon { font-size: 32px; opacity: 0.4; }
+.photo-slot .photo-placeholder p { font-size: 15px; color: rgba(150,190,255,0.5); text-align:center; line-height:1.4; }
 .photo-slot .photo-caption {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  background: linear-gradient(to top, rgba(0,0,30,0.85), transparent);
-  color: rgba(220,235,255,0.9);
-  font-size: 18px; font-weight: 500;
-  padding: 20px 16px 12px;
-  letter-spacing: 0.5px;
+  position: absolute; bottom:0; left:0; right:0;
+  background: linear-gradient(to top, rgba(0,0,30,0.82), transparent);
+  color: rgba(220,235,255,0.88);
+  font-size: 15px; font-weight: 500;
+  padding: 18px 14px 10px;
 }
 
-/* ══════════════════════════════
-   하단 정보 바 (전체 너비)
-══════════════════════════════ */
+/* ══════════════════════
+   하단 정보 바
+══════════════════════ */
 .bottom-bar {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 56px;
-  background: rgba(5,15,60,0.85);
-  border-top: 1px solid rgba(60,120,255,0.3);
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  padding: 0 80px;
-  gap: 0;
-  z-index: 20;
+  height: 52px;
+  background: rgba(5,15,60,0.88);
+  border-top: 1px solid rgba(60,120,255,0.28);
+  display: flex; align-items: center;
+  padding: 0 64px; z-index: 20;
 }
 .bar-logo {
-  font-size: 22px; font-weight: 700;
-  color: #4fa3ff;
-  letter-spacing: 2px;
-  margin-right: 60px;
-  white-space: nowrap;
+  font-size: 19px; font-weight: 700;
+  color: #4fa3ff; letter-spacing: 2px;
+  margin-right: 48px; white-space: nowrap;
 }
-.ticker-wrap {
-  flex: 1;
-  overflow: hidden;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
+.ticker-wrap { flex:1; overflow:hidden; height:100%; display:flex; align-items:center; }
 .ticker-text {
-  white-space: nowrap;
-  font-size: 20px;
-  color: rgba(200,220,255,0.75);
-  letter-spacing: 0.5px;
-  animation: ticker 40s linear infinite;
+  white-space: nowrap; font-size: 17px;
+  color: rgba(200,220,255,0.72); letter-spacing: 0.5px;
+  animation: ticker 38s linear infinite;
 }
 @keyframes ticker {
-  0%   { transform: translateX(100vw); }
+  0%   { transform: translateX(2456px); }
   100% { transform: translateX(-100%); }
 }
 .bar-time {
-  font-size: 24px; font-weight: 600;
+  font-size: 22px; font-weight: 600;
   color: rgba(180,210,255,0.85);
-  margin-left: 60px;
-  white-space: nowrap;
+  margin-left: 48px; white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 </style>
 </head>
 <body>
 
-<!-- 배경 이미지 -->
 <div class="bg"></div>
 <div class="overlay"></div>
 
-<!-- 메인 레이아웃 -->
 <div class="layout">
 
-  <!-- ── 좌측 패널 ── -->
+  <!-- 좌측 패널 -->
   <div class="left-panel">
     <div class="tag-line">
       <span class="tag">Digital Innovation</span>
       <span class="tag-dot"></span>
     </div>
 
+    <!--
+      ★ 메인 타이틀 변경 방법 ★
+      아래 텍스트를 원하는 내용으로 교체
+    -->
     <h1 class="main-title">
       미래를<br><span class="accent">설계</span>하는<br>기업
     </h1>
@@ -352,29 +274,28 @@ body {
     <div class="info-row">
       <div class="info-card">
         <div class="num">15<span class="unit">+</span></div>
-        <div class="label">연혁 (년)</div>
+        <div class="lbl">연혁 (년)</div>
       </div>
       <div class="info-card">
         <div class="num">350<span class="unit">+</span></div>
-        <div class="label">완료 프로젝트</div>
+        <div class="lbl">완료 프로젝트</div>
       </div>
       <div class="info-card">
         <div class="num">98<span class="unit">%</span></div>
-        <div class="label">고객 만족도</div>
+        <div class="lbl">고객 만족도</div>
       </div>
     </div>
   </div>
 
-  <!-- ── 우측 패널 ── -->
+  <!-- 우측 패널 -->
   <div class="right-panel">
 
     <!-- 유튜브 영상 슬롯 -->
     <div class="video-slot">
       <!--
         ★ 영상 업데이트 방법 ★
-        1. YouTube에 영상 업로드
-        2. 영상 URL에서 ID 복사 (youtube.com/watch?v=【여기】)
-        3. 아래 src의 YOUTUBE_VIDEO_ID 부분을 교체하고 저장(Commit)
+        YouTube URL: youtube.com/watch?v=【영상ID】
+        아래 YOUTUBE_VIDEO_ID 두 곳을 실제 영상ID로 교체 후 Commit
       -->
       <iframe
         id="yt-player"
@@ -385,18 +306,17 @@ body {
       <div class="video-label">▶ 영상 콘텐츠</div>
     </div>
 
-    <!-- 사진 3장 슬롯 -->
+    <!-- 사진 3칸 슬롯 -->
     <div class="photo-row">
 
       <!-- 사진 슬롯 1 -->
       <div class="photo-slot">
         <!--
           ★ 사진 업데이트 방법 ★
-          1. GitHub 저장소에 이미지 파일 업로드 (예: photo01.jpg)
-          2. 아래 src="photo01.jpg" 부분의 파일명 교체 후 저장(Commit)
+          GitHub에 이미지 파일 업로드 후 아래 파일명 교체
         -->
-        <img src="photo01.jpg" alt="사진 1"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <img src="photo01.jpg" alt="사진1"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
         <div class="photo-placeholder" style="display:none">
           <div class="ph-icon">🖼️</div>
           <p>photo01.jpg<br>업로드 후 표시</p>
@@ -406,8 +326,8 @@ body {
 
       <!-- 사진 슬롯 2 -->
       <div class="photo-slot">
-        <img src="photo02.jpg" alt="사진 2"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <img src="photo02.jpg" alt="사진2"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
         <div class="photo-placeholder" style="display:none">
           <div class="ph-icon">🖼️</div>
           <p>photo02.jpg<br>업로드 후 표시</p>
@@ -417,8 +337,8 @@ body {
 
       <!-- 사진 슬롯 3 -->
       <div class="photo-slot">
-        <img src="photo03.jpg" alt="사진 3"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <img src="photo03.jpg" alt="사진3"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
         <div class="photo-placeholder" style="display:none">
           <div class="ph-icon">🖼️</div>
           <p>photo03.jpg<br>업로드 후 표시</p>
@@ -432,18 +352,14 @@ body {
 
 <!-- 하단 정보 바 -->
 <div class="bottom-bar">
-  <div class="bar-logo">
-    <!--
-      ★ 회사명 변경 방법 ★
-      아래 텍스트를 원하는 회사명으로 교체
-    -->
-    COMPANY NAME
-  </div>
+  <!--
+    ★ 회사명 변경: 아래 텍스트 교체
+  -->
+  <div class="bar-logo">COMPANY NAME</div>
   <div class="ticker-wrap">
     <div class="ticker-text" id="ticker">
       <!--
-        ★ 하단 뉴스 텍스트 변경 방법 ★
-        아래 텍스트를 원하는 내용으로 교체 (여러 항목은 &nbsp;&nbsp;│&nbsp;&nbsp; 로 구분)
+        ★ 공지사항 변경: 아래 텍스트 교체 (│ 로 항목 구분)
       -->
       공지사항 01: 내용을 입력하세요 &nbsp;&nbsp;│&nbsp;&nbsp;
       공지사항 02: 내용을 입력하세요 &nbsp;&nbsp;│&nbsp;&nbsp;
@@ -456,14 +372,13 @@ body {
 </div>
 
 <script>
-/* ── 1. 화면 크기에 맞게 자동 스케일 ── */
+/* 화면 크기에 맞게 자동 스케일 */
 function scaleBody() {
-  var scaleX = window.innerWidth  / 3840;
+  var scaleX = window.innerWidth  / 2456;
   var scaleY = window.innerHeight / 1080;
   var scale  = Math.min(scaleX, scaleY);
   document.body.style.transform = 'scale(' + scale + ')';
-  /* 남는 여백을 가운데 정렬 */
-  var offsetX = (window.innerWidth  - 3840 * scale) / 2;
+  var offsetX = (window.innerWidth  - 2456 * scale) / 2;
   var offsetY = (window.innerHeight - 1080 * scale) / 2;
   document.body.style.marginLeft = offsetX + 'px';
   document.body.style.marginTop  = offsetY + 'px';
@@ -471,7 +386,7 @@ function scaleBody() {
 scaleBody();
 window.addEventListener('resize', scaleBody);
 
-/* ── 2. 자동 전체화면 (클릭 시 전체화면 전환) ── */
+/* 자동 전체화면 */
 function goFullscreen() {
   var el = document.documentElement;
   if (!document.fullscreenElement) {
@@ -480,20 +395,13 @@ function goFullscreen() {
     else if (el.mozRequestFullScreen)    el.mozRequestFullScreen();
   }
 }
-/* 페이지 로드 후 3초 뒤 자동 전체화면 시도 */
-window.addEventListener('load', function() {
-  setTimeout(goFullscreen, 3000);
-});
-/* 전체화면 해제됐을 때 다시 시도 */
+window.addEventListener('load', function() { setTimeout(goFullscreen, 3000); });
 document.addEventListener('fullscreenchange', function() {
-  if (!document.fullscreenElement) {
-    setTimeout(goFullscreen, 1500);
-  }
+  if (!document.fullscreenElement) setTimeout(goFullscreen, 1500);
 });
-/* 화면 클릭 시에도 전체화면 */
 document.addEventListener('click', goFullscreen);
 
-/* ── 3. 실시간 시계 ── */
+/* 실시간 시계 */
 function updateClock() {
   var now = new Date();
   var h = String(now.getHours()).padStart(2,'0');
@@ -504,7 +412,7 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
-/* ── 4. YouTube ID 기본값이면 플레이스홀더 표시 ── */
+/* YouTube ID 기본값이면 플레이스홀더 */
 window.addEventListener('load', function() {
   var iframe = document.getElementById('yt-player');
   if (iframe && iframe.src.includes('YOUTUBE_VIDEO_ID')) {
